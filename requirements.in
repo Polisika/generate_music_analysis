@@ -1,0 +1,9 @@
+librosa
+sklearn
+pandas
+catboost
+seaborn
+mido
+torch
+pypianoroll
+numpy

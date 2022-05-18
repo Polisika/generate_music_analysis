@@ -8,7 +8,7 @@ from features import get_features
 from utils import extract_audio, tracks_replace_velocity, generate_sample, get_temp_name
 
 if __name__ == '__main__':
-    with open("result.csv", "w") as f:
+    with open("result_another_model.csv", "w") as f:
         for i in range(100):
             need_delete = (generate_sample(), get_temp_name(MID_FILES_SUFFIX), get_temp_name(WAV_FILES_SUFFIX))
             try:

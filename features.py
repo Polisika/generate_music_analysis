@@ -37,17 +37,11 @@ def get_features(filename):
     m = []
     for i in mfccs:
         m += [i.mean(), i.std()]
-    length_mean, rms_mean, rms_var, sbm, sbv = get_const_features(DATASET_FILENAME)
     features = [
-        length_mean,
         chromagram.mean(),
         chromagram.std(),
-        rms_mean,
-        rms_var,
         spectral_centroids.mean(),
         spectral_centroids.std(),
-        sbm,
-        sbv,
         spectral_rolloff.mean(),
         spectral_rolloff.std(),
         zero_crossings.mean(),

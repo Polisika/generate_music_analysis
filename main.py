@@ -29,11 +29,27 @@ def replace_velocity_file(midi_filename, normalized_filename):
     midi_file.save(normalized_filename)
 
 
+def run_musegan_experiments():
+    basic_path = "musegan/models"
+    for model_path in ["model_5k.pt",
+                       "model_40k.pt",
+                       "model_100k.pt",
+                       "model_200k.pt",
+                       "model_1200k.pt"]:
+        for i in range(1, 4):
+            d = basic_path + "/" + model_path.split("_", maxsplit=1)[-1].split(".")[0]
+            Path(d).mkdir(exist_ok=True)
+            source_filename = generate_sample(basic_path + "/" + model_path)
+            filename = f"{d}/{i}_normalised.mid"
+            replace_velocity_file(source_filename, filename)
+            extract_audio(filename, f"{d}/{i}.wav", shrink_seconds=None)
+
+            Path(source_filename).unlink(missing_ok=True)
+
+
 if __name__ == '__main__':
     # with open("result_another_model_5000123.csv", "w") as f:
     #     for _ in range(100):
     #         main(f)
     #main(2)
-    for i in range(1, 4):
-        replace_velocity_file(f"{i}.mid", f"{i}_n.mid")
-        extract_audio(f"{i}_n.mid", f"{i}.wav")
+    run_musegan_experiments()

@@ -1,4 +1,5 @@
 import tempfile
+from functools import lru_cache
 
 import click
 import librosa
@@ -9,9 +10,11 @@ import numpy as np
 from midi2audio import FluidSynth
 from pypianoroll import StandardTrack, Multitrack
 
-from consts import GENERATOR_MODEL_FILENAME
 from define_model import Generator, n_samples, latent_dim, measure_resolution, n_tracks, programs, is_drums, \
     track_names, n_pitches, lowest_pitch, tempo, beat_resolution
+
+
+torch.manual_seed(20220524)
 
 
 def tracks_replace_velocity(midi_file, velocity=50):
@@ -36,15 +39,29 @@ def extract_audio(input_midi_filename, output_audio_filename, shrink_seconds=30)
         sf.write(output_audio_filename, y, sr, subtype='PCM_24')
 
 
-def generate_sample():
+def vec_generator():
+    vec1 = torch.randn(n_samples, latent_dim)
+    vec2 = torch.randn(n_samples, latent_dim)
+    vec3 = torch.randn(n_samples, latent_dim)
+    while 1:
+        yield vec1
+        yield vec2
+        yield vec3
+
+
+@lru_cache(maxsize=1)
+def get_generator():
+    return vec_generator()
+
+
+def generate_sample(model_path="model.pt"):
     # Data
-    model = torch.load(GENERATOR_MODEL_FILENAME)
+    model = torch.load(model_path)
     gen = Generator()
     gen.load_state_dict(model["generator"])
     gen.eval()
-    sample_latent = torch.randn(n_samples, latent_dim)
+    sample_latent = next(get_generator())
     samples = gen(sample_latent).cpu().detach().numpy()
-
     samples = samples.transpose(1, 0, 2, 3).reshape(n_tracks, -1, n_pitches)
     tracks = []
     for idx, (program, is_drum, track_name) in enumerate(

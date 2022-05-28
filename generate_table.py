@@ -22,7 +22,7 @@ with open("result.md", 'w') as f:
         for k in i:
             f.write(f"""    <td>
         <audio controls="controls">
-          <source type="audio/mp3" src="{i[1]}" />
+          <source type="audio/mp3" src="{k[1]}" />
           <p>Your browser does not support the audio element.</p>
         </audio>
     </td>\n""")

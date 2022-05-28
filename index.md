@@ -1,3 +1,9 @@
+# MuseGAN
+<audio controls="controls">
+  <source type="audio/mp3" src="musegan/models/1.wav"></source>
+  <p>Your browser does not support the audio element.</p>
+</audio>
+
 ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/Polisika/generate_music_analysis/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.

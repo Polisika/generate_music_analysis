@@ -47,9 +47,11 @@ def run_musegan_experiments():
             Path(source_filename).unlink(missing_ok=True)
 
 
+def themetransformer_convert():
+    directory = Path("themetransformer")
+    for file in directory.glob("*.mid"):
+        extract_audio(file, f"{file}.wav", shrink_seconds=None)
+
+
 if __name__ == '__main__':
-    # with open("result_another_model_5000123.csv", "w") as f:
-    #     for _ in range(100):
-    #         main(f)
-    #main(2)
-    run_musegan_experiments()
+    themetransformer_convert()

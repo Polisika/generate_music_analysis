@@ -1,4 +1,5 @@
 from pathlib import Path
+import warnings
 
 from mido import MidiFile
 
@@ -53,5 +54,16 @@ def themetransformer_convert():
         extract_audio(file, f"{file}.wav", shrink_seconds=None)
 
 
+def themetransformer_classify():
+    directory = Path("themetransformer")
+    result = []
+    for file in directory.glob("*.wav"):
+        features = get_features(file)
+        genre, probabilities = classify(features)
+        result.append(f"{file} - {genre} - {probabilities}")
+
+    for i in result:
+        print(i)
+
 if __name__ == '__main__':
-    themetransformer_convert()
+    themetransformer_classify()

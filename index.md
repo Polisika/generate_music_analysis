@@ -107,7 +107,7 @@
 </tr>
 </table>
 
-## 5000 epochs model results (MP3)
+## 5000 epochs genre definition of model results (MP3)
 0-9 digits is genres definition.
 <table border="1" class="dataframe">
   <thead>
@@ -233,7 +233,7 @@
   </tbody>
 </table>
 
-## 40000 epochs model results (MP3)
+## 40000 epochs genre definition of model results (MP3)
 0-9 is genres definition.
 <table border="1" class="dataframe">
   <thead>

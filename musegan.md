@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>MuseGAN model</title>
-</head>
-<body>
-<h1>MuseGAN model</h1>
+# MuseGAN model
 <table>
 <tr><td>Num epochs</td><td>1</td><td>2</td><td>3</td></tr><tr>
     <td>5k</td>
@@ -114,7 +107,7 @@
 </tr>
 </table>
 
-<h2>5000 epochs genre definition of model results (MP3)</h2>
+## 5000 epochs genre definition of model results (MP3)
 0-9 digits is genres definition.
 <table border="1" class="dataframe">
   <thead>
@@ -240,7 +233,7 @@
   </tbody>
 </table>
 
-<h2>40000 epochs genre definition of model results (MP3)</h2>
+## 40000 epochs genre definition of model results (MP3)
 0-9 is genres definition.
 <table border="1" class="dataframe">
   <thead>
@@ -365,5 +358,3 @@
     </tr>
   </tbody>
 </table>
-</body>
-</html>

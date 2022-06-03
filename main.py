@@ -68,18 +68,21 @@ def directory_classify(dir_path):
 
 
 if __name__ == '__main__':
-    # dir_ = "musetransformer"
-    # another_dir = "wav_results"
-    # for i in Path(dir_).rglob("*.mid"):
-    #     extract_audio(str(i), another_dir + f"/{str(i).split('/')[-1]}.wav")
-    # res = directory_classify(another_dir)
-    # import pandas as pd
+    dir_ = ["2days_tt", "15000k_epochs", "1_5hour_tt"]
+    r = []
+    for d in dir_:
+        another_dir = "wav_results"
+        for i in Path(d).rglob("*.mid"):
+            extract_audio(str(i), another_dir + f"/{str(i).split('/')[-1]}.wav")
+        res = directory_classify(another_dir)
+        r += res
+    import pandas as pd
 
-    # df = pd.DataFrame(res)
-    # df.to_csv("musetransformer_classify.csv")
+    df = pd.DataFrame(r)
+    df.to_csv("musetransformer_classify.csv")
 
-    df = pd.read_csv("musetransformer_classify.csv")
+    #df = pd.read_csv("musetransformer_classify.csv")
 
     with open("result.md", "w") as f:
-        df.drop(["filename", 'Unnamed: 0'], axis=1).describe().to_html(f)
+        df.drop(["filename"], axis=1).describe().to_html(f)
 

@@ -1,4 +1,7 @@
 # 1 hour model
+Here 1, 2 and 3 - is randomized vectors, that generates before the inference stage. 
+Then they are goes to model's input as the state. 
+So, models generates results from the same vectors. 
 <table>
 <tr><th>Model</th><th>1</th><th>2</th><th>3</th></tr>
 <tr>

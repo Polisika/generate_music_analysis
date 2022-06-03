@@ -1,4 +1,10 @@
 # ThemeTransofrmer results
+First vertical column defines state of the model, which generates the result.
+
+874 melody sources is situated here: https://github.com/atosystem/ThemeTransformer/blob/main/theme_files/874_theme.mid
+
+Here only one track because this model more resistible, than MuseGAN.
+We can judge how model trained at every moment by only one track. 
 <table>
 <tr><td>Model type</td><td>874 melody</td></tr><tr>
 <td>214 epochs (25m)</td>    <td>
@@ -43,6 +49,7 @@
 </table>
 
 ## MP3 classify genres results
+Analytics: there are the same results from track to track.
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -168,6 +175,7 @@
 </table>
 
 ## MIDI classify genres results
+Analytics: there are the same results from track to track.
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">

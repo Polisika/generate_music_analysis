@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>1 hour model</title>
-</head>
-<body>
+# 1 hour model
 <table>
 <tr><th>Model</th><th>1</th><th>2</th><th>3</th></tr>
 <tr>
@@ -67,6 +61,3 @@
                   <p>Your browser does not support the audio element.</p>
                 </audio></td></tr>
 </table>
-
-</body>
-</html>

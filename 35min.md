@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>35 min model</title>
-</head>
-<body>
+# 35 min model
+
 <table>
 <tr><th>Model</th><th>1</th><th>2</th><th>3</th></tr>
 <tr>
@@ -32,6 +27,7 @@
                   <source type="audio/mp3" src="musetransformer/model_35min/model_35min_model_40k_3_normalised_theme.mid.wav" />
                   <p>Your browser does not support the audio element.</p>
                 </audio></td></tr>
+<tr>
 <td>100k</td>
 <td>        <audio controls="controls">
                   <source type="audio/mp3" src="musetransformer/model_35min/model_35min_model_100k_1_normalised_theme.mid.wav" />
@@ -70,6 +66,3 @@
                   <p>Your browser does not support the audio element.</p>
                 </audio></td></tr>
 </table>
-
-</body>
-</html>

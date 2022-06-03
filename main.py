@@ -67,7 +67,7 @@ def directory_classify(dir_path):
     return result
 
 
-if __name__ == '__main__':
+def themetransformer_classify():
     dir_ = ["2days_tt", "15000k_epochs", "1_5hour_tt"]
     r = []
     for d in dir_:
@@ -85,4 +85,17 @@ if __name__ == '__main__':
 
     with open("result.md", "w") as f:
         df.drop(["filename"], axis=1).describe().to_html(f)
+
+
+def musegan_get_midis(models, dir_path):
+    for model in models:
+        for _ in range(100):
+            filename = generate_sample(model, is_random=True)
+            n_f = f"{dir_path}/n_{filename}"
+            replace_velocity_file(filename, n_f)
+            Path(filename).unlink()
+
+
+if __name__ == '__main__':
+    musegan_get_midis(["musegan/models/model_40k.pt"], "musegan_midis")
 

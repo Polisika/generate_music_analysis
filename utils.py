@@ -54,13 +54,16 @@ def get_generator():
     return vec_generator()
 
 
-def generate_sample(model_path="model.pt"):
+def generate_sample(model_path="model.pt", is_random=False):
     # Data
     model = torch.load(model_path)
     gen = Generator()
     gen.load_state_dict(model["generator"])
     gen.eval()
-    sample_latent = next(get_generator())
+    if is_random:
+        sample_latent = torch.randn(n_samples, latent_dim)
+    else:
+        sample_latent = next(get_generator())
     samples = gen(sample_latent).cpu().detach().numpy()
     samples = samples.transpose(1, 0, 2, 3).reshape(n_tracks, -1, n_pitches)
     tracks = []

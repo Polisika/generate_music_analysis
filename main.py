@@ -14,12 +14,12 @@ def main(f):
     need_delete = (generate_sample(), get_temp_name(MID_FILES_SUFFIX), get_temp_name(WAV_FILES_SUFFIX))
     try:
         midi_filename, normalized_filename, audio_filename = need_delete
-        need_delete=need_delete[1:]
+        need_delete = need_delete[1:]
         replace_velocity_file(midi_filename, normalized_filename)
         extract_audio(normalized_filename, audio_filename)
         features = get_features(audio_filename)
         genre, probabilities = classify(features)
-        #f.write(";".join([str(k) for k in probabilities[0]]) + f";{genre[0]}\n")
+        # f.write(";".join([str(k) for k in probabilities[0]]) + f";{genre[0]}\n")
     finally:
         for i in need_delete:
             Path(i).unlink(missing_ok=True)
@@ -81,7 +81,7 @@ def themetransformer_classify():
     df = pd.DataFrame(r)
     df.to_csv("musetransformer_classify.csv")
 
-    #df = pd.read_csv("musetransformer_classify.csv")
+    # df = pd.read_csv("musetransformer_classify.csv")
 
     with open("result.md", "w") as f:
         df.drop(["filename"], axis=1).describe().to_html(f)
@@ -96,6 +96,27 @@ def musegan_get_midis(models, dir_path):
             Path(filename).unlink()
 
 
+def transform_musegan_to_themetransformer(midi_filepath: str, out_midi_filepath: str):
+    import pypianoroll
+    import numpy as np
+    midi = pypianoroll.read(midi_filepath)
+    tracks = [i for i in midi.tracks if i.name in ["Guitar", "Piano"]]
+    replace_names = {"Guitar": "MELODY", "Piano": "PIANO"}
+    shape_tracks = (192, 128)
+    for i in tracks:
+        i.name = replace_names[i.name]
+        i.pianoroll.resize(shape_tracks)
+    theme_track = np.zeros(shape_tracks[::-1])
+    theme_track[1] = np.ones((128, 1))
+    theme_track = theme_track.transpose()
+    theme_track = pypianoroll.Track(name='Theme info track',
+                                    program=0,
+                                    is_drum=False,
+                                    pianoroll=theme_track)
+    tracks.append(theme_track)
+    midi.tracks = tracks
+    pypianoroll.save(out_midi_filepath, midi)
+
+
 if __name__ == '__main__':
     musegan_get_midis(["musegan/models/model_40k.pt"], "musegan_midis")
-

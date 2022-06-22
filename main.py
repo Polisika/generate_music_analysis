@@ -18,7 +18,11 @@ def main(f=None):
     :param f: file descriptor for writing results in csv file.
     :return: nothing
     """
-    need_delete = (generate_sample(), get_temp_name(MID_FILES_SUFFIX), get_temp_name(WAV_FILES_SUFFIX))
+    need_delete = (
+        generate_sample(),
+        get_temp_name(MID_FILES_SUFFIX),
+        get_temp_name(WAV_FILES_SUFFIX),
+    )
     try:
         midi_filename, normalized_filename, audio_filename = need_delete
         need_delete = need_delete[1:]
@@ -48,16 +52,19 @@ def replace_velocity_file(midi_filename, normalized_filename):
 def run_musegan_experiments():
     """
     Run experiments for MuseGAN models.
-    Uses model_5k.pt model_40k.pt model_100k.pt model_200k.pt model_1200k.pt parameters.
+    Uses model_5k.pt model_40k.pt model_100k.pt
+    model_200k.pt model_1200k.pt parameters.
     Clears all temp files.
     :return: nothing
     """
     basic_path = "musegan/models"
-    for model_path in ["model_5k.pt",
-                       "model_40k.pt",
-                       "model_100k.pt",
-                       "model_200k.pt",
-                       "model_1200k.pt"]:
+    for model_path in [
+        "model_5k.pt",
+        "model_40k.pt",
+        "model_100k.pt",
+        "model_200k.pt",
+        "model_1200k.pt",
+    ]:
         for i in range(1, 4):
             d = basic_path + "/" + model_path.split("_", maxsplit=1)[-1].split(".")[0]
             Path(d).mkdir(exist_ok=True)
@@ -90,8 +97,13 @@ def directory_classify(dir_path):
     for file in directory.rglob("*.wav"):
         features = get_features(file)
         genre, probabilities = classify(features)
-        result.append({"filename": str(file).split("/")[-1], "genre": genre,
-                       **dict(zip(range(0, len(probabilities[0])), probabilities[0]))})
+        result.append(
+            {
+                "filename": str(file).split("/")[-1],
+                "genre": genre,
+                **dict(zip(range(0, len(probabilities[0])), probabilities[0])),
+            }
+        )
 
     return result
 
@@ -150,14 +162,13 @@ def transform_musegan_to_themetransformer(midi_filepath: str, out_midi_filepath:
     theme_track = np.zeros(shape_tracks[::-1])
     theme_track[1] = np.ones((128, 1))
     theme_track = theme_track.transpose()
-    theme_track = pypianoroll.Track(name='Theme info track',
-                                    program=0,
-                                    is_drum=False,
-                                    pianoroll=theme_track)
+    theme_track = pypianoroll.Track(
+        name="Theme info track", program=0, is_drum=False, pianoroll=theme_track
+    )
     tracks.append(theme_track)
     midi.tracks = tracks
     pypianoroll.save(out_midi_filepath, midi)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     musegan_get_midis(["musegan/models/model_40k.pt"], "musegan_midis")

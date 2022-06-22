@@ -59,7 +59,7 @@ def get_features(filename):
         y_perc.mean(),
         y_perc.std(),
         tempo,
-        *m
+        *m,
     ]
     min_max_scaler = load_scaler(SCALER_FILENAME)
     result_features = min_max_scaler.transform([features])

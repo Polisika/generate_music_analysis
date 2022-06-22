@@ -1,7 +1,8 @@
 from pathlib import Path
-import warnings
 
+import numpy as np
 import pandas as pd
+import pypianoroll
 from mido import MidiFile
 
 from classify import classify
@@ -10,7 +11,13 @@ from features import get_features
 from utils import extract_audio, tracks_replace_velocity, generate_sample, get_temp_name
 
 
-def main(f):
+def main(f=None):
+    """
+    Main pipeline for classify of the MuseGAN model.
+    Clears all temp files.
+    :param f: file descriptor for writing results in csv file.
+    :return: nothing
+    """
     need_delete = (generate_sample(), get_temp_name(MID_FILES_SUFFIX), get_temp_name(WAV_FILES_SUFFIX))
     try:
         midi_filename, normalized_filename, audio_filename = need_delete
@@ -19,19 +26,32 @@ def main(f):
         extract_audio(normalized_filename, audio_filename)
         features = get_features(audio_filename)
         genre, probabilities = classify(features)
-        # f.write(";".join([str(k) for k in probabilities[0]]) + f";{genre[0]}\n")
+        if f:
+            f.write(";".join([str(k) for k in probabilities[0]]) + f";{genre[0]}\n")
     finally:
         for i in need_delete:
             Path(i).unlink(missing_ok=True)
 
 
 def replace_velocity_file(midi_filename, normalized_filename):
+    """
+    Replace velocity for all notes in midi file.
+    :param midi_filename: path to midi file.
+    :param normalized_filename: path to output midi file.
+    :return: nothing
+    """
     midi_file = MidiFile(midi_filename)
     tracks_replace_velocity(midi_file)
     midi_file.save(normalized_filename)
 
 
 def run_musegan_experiments():
+    """
+    Run experiments for MuseGAN models.
+    Uses model_5k.pt model_40k.pt model_100k.pt model_200k.pt model_1200k.pt parameters.
+    Clears all temp files.
+    :return: nothing
+    """
     basic_path = "musegan/models"
     for model_path in ["model_5k.pt",
                        "model_40k.pt",
@@ -50,12 +70,21 @@ def run_musegan_experiments():
 
 
 def themetransformer_convert():
+    """
+    Extracts MP3 files for midi files in themetransformer directory.
+    :return: nothing
+    """
     directory = Path("themetransformer")
     for file in directory.glob("*.mid"):
         extract_audio(file, f"{file}.wav", shrink_seconds=None)
 
 
 def directory_classify(dir_path):
+    """
+    Classify every *.wav file in the dir_path directory.
+    :param dir_path: filepath to directory.
+    :return: list of the dicts with genre classify results.
+    """
     directory = Path(dir_path)
     result = []
     for file in directory.rglob("*.wav"):
@@ -68,6 +97,10 @@ def directory_classify(dir_path):
 
 
 def themetransformer_classify():
+    """
+    Classify and represents results of the Theme Transformer classify.
+    :return: nothing
+    """
     dir_ = ["2days_tt", "15000k_epochs", "1_5hour_tt"]
     r = []
     for d in dir_:
@@ -76,18 +109,21 @@ def themetransformer_classify():
             extract_audio(str(i), another_dir + f"/{str(i).split('/')[-1]}.wav")
         res = directory_classify(another_dir)
         r += res
-    import pandas as pd
 
     df = pd.DataFrame(r)
     df.to_csv("musetransformer_classify.csv")
-
-    # df = pd.read_csv("musetransformer_classify.csv")
 
     with open("result.md", "w") as f:
         df.drop(["filename"], axis=1).describe().to_html(f)
 
 
 def musegan_get_midis(models, dir_path):
+    """
+    Generates for every model in models 100 random samples.
+    :param models: list of filepath.
+    :param dir_path: path to the existing directory for storing result.
+    :return: nothing
+    """
     for model in models:
         for _ in range(100):
             filename = generate_sample(model, is_random=True)
@@ -97,8 +133,13 @@ def musegan_get_midis(models, dir_path):
 
 
 def transform_musegan_to_themetransformer(midi_filepath: str, out_midi_filepath: str):
-    import pypianoroll
-    import numpy as np
+    """
+    Get input for Theme Transformer from MuseGAN output.
+    :param midi_filepath: result of the MuseGAN model (generate sample).
+    Strongly recommends use normalize velocity before.
+    :param out_midi_filepath: filepath of the output.
+    :return: nothing
+    """
     midi = pypianoroll.read(midi_filepath)
     tracks = [i for i in midi.tracks if i.name in ["Guitar", "Piano"]]
     replace_names = {"Guitar": "MELODY", "Piano": "PIANO"}

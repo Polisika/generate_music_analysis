@@ -1,3 +1,8 @@
+"""
+Defines MuseGAN generator module.
+"""
+
+
 import torch
 
 latent_dim = 128

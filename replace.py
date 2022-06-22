@@ -1,7 +1,8 @@
 """
-In model generates midi-file, in which velocity=1 or 0
-So we need make velocity bigger
+In model generates midi-file, in which velocity=1 or 0.
+So we need make velocity make bigger.
 """
+
 import click
 import mido
 

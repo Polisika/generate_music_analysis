@@ -1,3 +1,7 @@
+"""
+File with consts for research tasks.
+"""
+
 SCALER_FILENAME = "scaler.gz"
 MODEL_FILENAME = "classificator_model.cbm"
 DATASET_FILENAME = "features_30_sec.csv"

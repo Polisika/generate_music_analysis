@@ -3,12 +3,20 @@ from functools import cache
 import librosa
 import sklearn
 
-from consts import SCALER_FILENAME, DATASET_FILENAME
+from consts import SCALER_FILENAME
 from save_load import load_scaler, load_dataset
 
 
 @cache
 def get_const_features(filename):
+    """
+    Gets dataset from filename and returns consts of the
+    length, rms_mean, rms_var, spectral_bandwidth_mean, spectral_bandwidth_var
+    fields.
+    :param filename: dataset file
+    :return: length_mean, rms_mean mean, rms_var mean,
+        spectral_bandwidth_mean mean, spectral_bandwidth_var mean
+    """
     X = load_dataset(filename)
     length_mean = int(X.length.mean())
     rms_mean = X.rms_mean.mean()

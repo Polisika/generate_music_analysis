@@ -1,3 +1,9 @@
+"""
+Module sets seed for torch library (for reproducibility).
+Has functions for processing MIDI-files and convert it to MP3 format.
+"""
+
+
 import tempfile
 from functools import lru_cache
 
@@ -18,6 +24,12 @@ torch.manual_seed(20220524)
 
 
 def tracks_replace_velocity(midi_file, velocity=50):
+    """
+    Changes velocity of notes in tracks of the midi_file.
+    :param midi_file: mido.MidiFile object.
+    :param velocity: set to this velocity (default 50, max 100)
+    :return: nothing
+    """
     tracks_start = 1
     have_signal = 1
     tracks = midi_file.tracks[tracks_start:]
@@ -31,6 +43,13 @@ def tracks_replace_velocity(midi_file, velocity=50):
 
 
 def extract_audio(input_midi_filename, output_audio_filename, shrink_seconds=30):
+    """
+    Creates wav file from midi file.
+    :param input_midi_filename: path to midi file.
+    :param output_audio_filename: path to output .wav file.
+    :param shrink_seconds: take first shrink_seconds seconds of the result.
+    :return: nothing
+    """
     with tempfile.NamedTemporaryFile(suffix='.wav', delete=True) as filename:
         fs = FluidSynth()
         fs.midi_to_audio(input_midi_filename, filename.name)
@@ -40,6 +59,11 @@ def extract_audio(input_midi_filename, output_audio_filename, shrink_seconds=30)
 
 
 def vec_generator():
+    """
+    Random vector generator for MuseGAN.
+    Generates 3 random generators and then yields it endlessly.
+    :return: vector with shape (n_samples, latent_dim)
+    """
     vec1 = torch.randn(n_samples, latent_dim)
     vec2 = torch.randn(n_samples, latent_dim)
     vec3 = torch.randn(n_samples, latent_dim)
@@ -51,10 +75,20 @@ def vec_generator():
 
 @lru_cache(maxsize=1)
 def get_generator():
+    """
+    Initializes only one generator (Singleton).
+    :return: Generator object
+    """
     return vec_generator()
 
 
 def generate_sample(model_path="model.pt", is_random=False):
+    """
+    Generate midi-file from MuseGAN model with model_path parameters.
+    :param model_path: filepath to MuseGAN model parameters.
+    :param is_random: generate vector random or use generator
+    :return: filename of the result midi file
+    """
     # Data
     model = torch.load(model_path)
     gen = Generator()
@@ -96,4 +130,9 @@ def generate_sample(model_path="model.pt", is_random=False):
 
 
 def get_temp_name(suffix):
+    """
+    Get filename for temp file with suffix on the end.
+    :param suffix: inserts in end of the filename (default .deleteme)
+    :return: filename of the temp file
+    """
     return next(tempfile._get_candidate_names()) + (suffix or ".deleteme")

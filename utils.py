@@ -46,17 +46,22 @@ def tracks_replace_velocity(midi_file, velocity=50):
     have_signal = 1
     tracks = midi_file.tracks[tracks_start:]
     is_only_0_and_1 = {
-        message.velocity for message in tracks[0] if message.type == "note_on"
+        message.velocity
+        for message in tracks[0]
+        if message.type == "note_on"
     } == {0, 1}
     if not is_only_0_and_1:
-        click.echo("There are many variations of the velocity. Exit.")
+        click.echo("There are many variations "
+                   "of the velocity. Exit.")
     for track in tracks:
         for message in track:
             if message.type == "note_on" and message.velocity == have_signal:
                 message.velocity = velocity
 
 
-def extract_audio(input_midi_filename, output_audio_filename, shrink_seconds=30):
+def extract_audio(input_midi_filename,
+                  output_audio_filename,
+                  shrink_seconds=30):
     """
     Creates wav file from midi file.
     :param input_midi_filename: path to midi file.
@@ -119,15 +124,20 @@ def generate_sample(model_path="model.pt", is_random=False):
         zip(programs, is_drums, track_names)
     ):
         pianoroll = np.pad(
-            samples[idx] > 0.5, ((0, 0), (lowest_pitch, 128 - lowest_pitch - n_pitches))
+            samples[idx] > 0.5,
+            ((0, 0),
+             (lowest_pitch, 128 - lowest_pitch - n_pitches))
         )
         tracks.append(
             StandardTrack(
-                name=track_name, program=program, is_drum=is_drum, pianoroll=pianoroll
+                name=track_name, program=program,
+                is_drum=is_drum, pianoroll=pianoroll
             )
         )
     tempo_array = np.full((4 * 4 * measure_resolution, 1), tempo)
-    m = Multitrack(tracks=tracks, tempo=tempo_array, resolution=beat_resolution)
+    m = Multitrack(tracks=tracks,
+                   tempo=tempo_array,
+                   resolution=beat_resolution)
 
     temp_name = next(tempfile._get_candidate_names())
     filename = f"{temp_name}.mid"

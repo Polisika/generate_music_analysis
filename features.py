@@ -11,8 +11,8 @@ from save_load import load_scaler, load_dataset
 def get_const_features(filename):
     """
     Gets dataset from filename and returns consts of the
-    length, rms_mean, rms_var, spectral_bandwidth_mean, spectral_bandwidth_var
-    fields.
+    length, rms_mean, rms_var, spectral_bandwidth_mean,
+    spectral_bandwidth_var fields.
     :param filename: dataset file
     :return: length_mean, rms_mean mean, rms_var mean,
         spectral_bandwidth_mean mean, spectral_bandwidth_var mean

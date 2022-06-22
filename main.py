@@ -8,7 +8,12 @@ from mido import MidiFile
 from classify import classify
 from consts import MID_FILES_SUFFIX, WAV_FILES_SUFFIX
 from features import get_features
-from utils import extract_audio, tracks_replace_velocity, generate_sample, get_temp_name
+from utils import (
+    extract_audio,
+    tracks_replace_velocity,
+    generate_sample,
+    get_temp_name
+)
 
 
 def main(f=None):
@@ -31,7 +36,9 @@ def main(f=None):
         features = get_features(audio_filename)
         genre, probabilities = classify(features)
         if f:
-            f.write(";".join([str(k) for k in probabilities[0]]) + f";{genre[0]}\n")
+            f.write(";".join([str(k)
+                              for k in probabilities[0]])
+                    + f";{genre[0]}\n")
     finally:
         for i in need_delete:
             Path(i).unlink(missing_ok=True)
@@ -66,7 +73,8 @@ def run_musegan_experiments():
         "model_1200k.pt",
     ]:
         for i in range(1, 4):
-            d = basic_path + "/" + model_path.split("_", maxsplit=1)[-1].split(".")[0]
+            d = basic_path + "/" + \
+                model_path.split("_", maxsplit=1)[-1].split(".")[0]
             Path(d).mkdir(exist_ok=True)
             source_filename = generate_sample(basic_path + "/" + model_path)
             filename = f"{d}/{i}_normalised.mid"
@@ -101,7 +109,10 @@ def directory_classify(dir_path):
             {
                 "filename": str(file).split("/")[-1],
                 "genre": genre,
-                **dict(zip(range(0, len(probabilities[0])), probabilities[0])),
+                **dict(zip(
+                    range(0, len(probabilities[0])),
+                    probabilities[0])
+                ),
             }
         )
 
@@ -118,7 +129,8 @@ def themetransformer_classify():
     for d in dir_:
         another_dir = "wav_results"
         for i in Path(d).rglob("*.mid"):
-            extract_audio(str(i), another_dir + f"/{str(i).split('/')[-1]}.wav")
+            extract_audio(str(i),
+                          another_dir + f"/{str(i).split('/')[-1]}.wav")
         res = directory_classify(another_dir)
         r += res
 
@@ -144,7 +156,8 @@ def musegan_get_midis(models, dir_path):
             Path(filename).unlink()
 
 
-def transform_musegan_to_themetransformer(midi_filepath: str, out_midi_filepath: str):
+def transform_musegan_to_themetransformer(midi_filepath: str,
+                                          out_midi_filepath: str):
     """
     Get input for Theme Transformer from MuseGAN output.
     :param midi_filepath: result of the MuseGAN model (generate sample).
@@ -163,7 +176,8 @@ def transform_musegan_to_themetransformer(midi_filepath: str, out_midi_filepath:
     theme_track[1] = np.ones((128, 1))
     theme_track = theme_track.transpose()
     theme_track = pypianoroll.Track(
-        name="Theme info track", program=0, is_drum=False, pianoroll=theme_track
+        name="Theme info track", program=0,
+        is_drum=False, pianoroll=theme_track
     )
     tracks.append(theme_track)
     midi.tracks = tracks

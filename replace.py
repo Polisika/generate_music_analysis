@@ -14,9 +14,11 @@ from utils import tracks_replace_velocity
 @click.option(
     "--velocity",
     default=50,
-    help="If condition matches - then " "change velocity on this value. Default is 50.",
+    help="If condition matches - then " 
+         "change velocity on this value. Default is 50.",
 )
-@click.option("--output", default="out_velocity.mid", help="File for output.")
+@click.option("--output", default="out_velocity.mid",
+              help="File for output.")
 def replace_velocity(name, velocity, output):
     """Replace velocity for track if there are only 0 and 1 values."""
     try:

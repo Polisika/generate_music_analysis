@@ -182,7 +182,7 @@ So, models generates results from the same vectors.
       <td>0.0270</td>
       <td>0.1640</td>
       <td>0.0527</td>
-      <td style="color:red"><b>0.2553</b></td>
+      <td style="background-color:rgba(255,0,0,0.31)"><b>0.2553</b></td>
     </tr>
     <tr>
       <th>25%</th>
@@ -232,7 +232,7 @@ So, models generates results from the same vectors.
       <td>0.1180</td>
       <td>0.1035</td>
       <td>0.0366</td>
-      <td style="color:red"><b>0.2392</b></td>
+      <td style="background-color:rgba(255,0,0,0.31)"><b>0.2392</b></td>
       <td>0.0675</td>
       <td>0.3083</td>
     </tr>
